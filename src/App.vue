@@ -13,6 +13,7 @@ import Calculator from './components/Calculator.vue'
   </header>
 
   <main>
+    <!-- todo: remove -->
     <!-- <TheWelcome /> -->
     <Calculator />
   </main>
