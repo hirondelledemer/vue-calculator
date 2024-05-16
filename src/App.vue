@@ -14,7 +14,6 @@ import Calculator from './components/Calculator.vue'
 
   <main>
     <!-- todo: remove -->
-    <!-- todo: remove -->
     <!-- <TheWelcome /> -->
     <Calculator />
   </main>
