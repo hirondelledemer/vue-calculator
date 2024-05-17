@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
-import Calculator from './components/Calculator.vue'
+// import Calculator from './components/Calculator.vue'
+import App2 from './App2.vue';
 </script>
 
 <template>
@@ -15,7 +16,8 @@ import Calculator from './components/Calculator.vue'
   <main>
     <!-- todo: remove -->
     <!-- <TheWelcome /> -->
-    <Calculator />
+    <!-- <Calculator /> -->
+    <App2 />
   </main>
 </template>
 
