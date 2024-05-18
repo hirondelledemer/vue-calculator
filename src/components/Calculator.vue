@@ -1,10 +1,12 @@
 <template>
   <div class="container">
     <div class="display">
-      <input v-model.number="num1" type="number" />
+      <div class="input-sizer">
+        <input class="input" v-model.number="num1" type="number" />
+      </div>
       <!-- todo: fix this -->
       {{ operation }}
-      <input v-model.number="num2" type="number" />
+      <input class="input" v-model.number="num2" type="number" />
     </div>
 
     <div class="keypad">
@@ -100,8 +102,57 @@ export default {
   border-radius: 5px;
 }
 
+
+/* .input-sizer {
+  display: inline-grid;
+  vertical-align: top;
+  align-items: center;
+  position: relative;
+  border: solid 1px;
+  padding: .25em .5em;
+  margin: 5px;
+
+  &::after,
+  .input {
+    width: auto;
+    min-width: 1em;
+    grid-area: 1 / 2;
+    font: inherit;
+    padding: 0.25em;
+    margin: 0;
+    resize: none;
+    background: none;
+    appearance: none;
+    border: none;
+  }
+
+  &::after {
+    content: attr(data-value) ' ';
+    visibility: hidden;
+    white-space: pre-wrap;
+  }
+} */
+
+.input {
+  border: none;
+  background-color: transparent;
+  -moz-appearance: textfield;
+  color: #ffffff;
+  /* todo: make auto */
+  width: 50px;
+
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
 .display {
-  flex: 1;
+  display: flex;
+  justify-content: end;
   border: 2px solid #ebebeb;
   margin: 10px;
   text-align: right;
