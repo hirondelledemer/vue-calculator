@@ -8,24 +8,24 @@
     </div>
 
     <div class="keypad">
-      <button class="key num" v-for="key in [1, 2, 3]" :key="key" @click="useNumber(key)">{{ key }}</button>
+      <button class="key num" v-for="key in [1, 2, 3]" :key="key" @click="setNumber(key)">{{ key }}</button>
       <button class="key fn" @click="() => setOperator('sum')">
         +
       </button>
 
-      <button class="key num" v-for="key in [4, 5, 6]" :key="key" @click="useNumber(key)">{{ key }}</button>
+      <button class="key num" v-for="key in [4, 5, 6]" :key="key" @click="setNumber(key)">{{ key }}</button>
       <button class="key fn" @click="() => setOperator('minus')">
         -
       </button>
-      <button class="key num" v-for="key in [7, 8, 9]" :key="key" @click="useNumber(key)">{{ key }}</button>
+      <button class="key num" v-for="key in [7, 8, 9]" :key="key" @click="setNumber(key)">{{ key }}</button>
       <button class="key fn" @click="() => setOperator('multiply')">
         *
       </button>
 
-      <button class="key fn" @click="() => console.log('clear')">
+      <button class="key fn" @click="() => console.log('todo: clear')">
         C
       </button>
-      <button class="key num" @click="() => console.log('zero')">
+      <button class="key num" @click="() => setNumber(0)">
         *
       </button>
       <button class="key fn" @click="() => setOperator('divide')">
@@ -43,7 +43,7 @@ export default {
     return {
       num1: 0,
       num2: 0,
-      operation: 'sum',
+      operation: undefined,
       result: null
     };
   },
@@ -76,9 +76,16 @@ export default {
     },
     setOperator: function (operation) { // todo: types
       this.operation = operation
+    },
+    setNumber: function (number) { // todo: types
+      if (this.operation) {
+        this.num2 = number;
+        return;
+      }
+      this.num1 = number;
     }
   }
-};
+}
 </script>
 
 <style scoped>
