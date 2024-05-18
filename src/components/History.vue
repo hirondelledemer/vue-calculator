@@ -1,4 +1,5 @@
 <template>
+    <CalculatorComponent @calculated="addToHistory" ref="calculator" />
     <div>
         <ul>
             <li v-for="(entry, index) in history" :key="index">
@@ -12,10 +13,35 @@
 </template>
   
 <script lang="ts">
+import CalculatorComponent from './Calculator.vue';
+
+interface HistoryEntry {
+    num1: number;
+    num2: number;
+    operation: string; // todo
+    result: number; // todo
+}
+
+interface HistoryData {
+    history: HistoryEntry[];
+}
+
 
 export default {
-    props: ['history'],
+    components: {
+        CalculatorComponent,
+    },
+    data(): HistoryData {
+        return {
+            history: [],
+        };
+    },
     methods: {
+        addToHistory(calculation: HistoryEntry) {
+            this.history.push(calculation);
+            this.$emit('calculated', calculation)
+        },
+
         exportHistory() {
             const dataStr = JSON.stringify(this.history);
             const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -26,6 +52,7 @@ export default {
             linkElement.click();
         },
         importHistory(event: any) { // todo: types
+            console.log(event.target);
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -41,7 +68,7 @@ export default {
             }
         },
         clearHistory() {
-            this.$emit('cleared');
+            this.history = [];
         }
     }
 };

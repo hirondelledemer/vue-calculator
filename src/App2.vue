@@ -1,42 +1,36 @@
 <template>
     <div id="app">
-        <div>
+        <!-- <div>
 
             <CalculatorComponent @calculated="addToHistory" ref="calculator" />
-        </div>
+        </div> -->
         <div>
 
             <ResultComponent :result="currentResult" @calculate="calculate" />
         </div>
         <div>
 
-            <HistoryComponent :history="history" @imported="importHistory" @cleared="clearHistory" />
+            <HistoryComponent @imported="importHistory" @calculated="addToHistory" />
         </div>
     </div>
 </template>
   
 <script>
-import CalculatorComponent from './components/Calculator.vue';
 import ResultComponent from './components/Result.vue';
 import HistoryComponent from './components/History.vue';
 
 export default {
     components: {
-        CalculatorComponent,
         ResultComponent,
         HistoryComponent
     },
     data() {
         return {
-            history: [],
             currentResult: null
         };
     },
     methods: {
-        addToHistory(calculation) {
-
-            console.log(calculation)
-            this.history.push(calculation);
+        addToHistory(calculation) { //todo: rename
             this.currentResult = calculation.result;
         },
         calculate() {

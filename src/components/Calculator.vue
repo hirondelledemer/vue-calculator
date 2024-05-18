@@ -55,7 +55,7 @@ interface CalculatorData {
 export default {
   data(): CalculatorData {
     return {
-      num1: 0,
+      num1: 0, // todo: maybe undefiend in order not to show 0
       num2: 0,
       operation: undefined,
       result: null
