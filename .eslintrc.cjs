@@ -15,15 +15,6 @@ module.exports = {
       extends: ['plugin:playwright/recommended']
     }
   ],
-  // todo:
-  // rules: {
-  //   'vue/multi-word-component-names': [
-  //     '',
-  //     {
-  //       ignores: ['Calculator']
-  //     }
-  //   ]
-  // },
   parserOptions: {
     ecmaVersion: 'latest'
   }

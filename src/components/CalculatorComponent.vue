@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="display">
-      <!-- {{ providedHistory }} -->
       <div v-for="(entry, index) in providedHistory" :key="index">
         {{ entry.num1 }} {{ entry.operation }} {{ entry.num2 }} = {{ entry.result }}
       </div>
@@ -9,7 +8,6 @@
         <div class="input-sizer">
           <input class="input" v-model.number="num1" type="number" />
         </div>
-        <!-- todo: fix this -->
         {{ operation }}
         <input class="input" v-model.number="num2" type="number" />
 
@@ -31,7 +29,7 @@
         *
       </button>
 
-      <button class="key fn" @click="() => console.log('todo: clear')">
+      <button class="key fn" @click="clear">
         C
       </button>
       <button class="key num" @click="() => setNumber(0)">
@@ -124,13 +122,23 @@ export default {
     setOperator: function (operation: Operation) {
       this.operation = operation
     },
+    setNumToInput: function (value: number | undefined, valueToAdd: number) {
+      const num = value || 0;
+      return num >= 0 ? num * 10 + valueToAdd : num * 10 - valueToAdd;
+    },
     setNumber: function (number: number) {
+
       if (this.operation) {
-        this.num2 = (this.num2 || 0) * 10 + number;
+        this.num2 = this.setNumToInput(this.num2, number);
         return;
       }
+      this.num1 = this.setNumToInput(this.num1, number);
 
-      this.num1 = (this.num1 || 0) * 10 + number;
+    },
+    clear: function () {
+      this.num1 = undefined
+      this.num2 = undefined
+      this.result = null;
     }
   }
 }
@@ -154,7 +162,7 @@ export default {
   background-color: transparent;
   -moz-appearance: textfield;
   color: #ffffff;
-  /* todo: make auto */
+  /* todo: make auto width */
   width: 50px;
 
 }
