@@ -1,16 +1,12 @@
 <template>
     <div id="app">
-        <!-- <div>
-
-            <CalculatorComponent @calculated="addToHistory" ref="calculator" />
-        </div> -->
         <div>
 
             <ResultComponent :result="currentResult" @calculate="calculate" />
         </div>
         <div>
 
-            <HistoryComponent @imported="importHistory" @calculated="addToHistory" />
+            <HistoryComponent @calculated="addToHistory" />
         </div>
     </div>
 </template>
@@ -36,12 +32,6 @@ export default {
         calculate() {
             this.$refs.calculator.calculate();
         },
-        importHistory(importedHistory) {
-            this.history = [...this.history, ...importedHistory.filter(entry => entry.result !== null)];
-        },
-        clearHistory() {
-            this.history = [];
-        }
     }
 };
 </script>

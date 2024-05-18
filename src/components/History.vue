@@ -59,7 +59,7 @@ export default {
                 reader.onload = (e: any) => { // todo:types
                     try {
                         const importedHistory = JSON.parse(e.target.result);
-                        this.$emit('imported', importedHistory);
+                        this.history = [...this.history, ...importedHistory.filter((entry: HistoryEntry) => entry.result !== null)];
                     } catch (error) {
                         console.error('Error importing history', error);
                     }
@@ -67,6 +67,7 @@ export default {
                 reader.readAsText(file);
             }
         },
+
         clearHistory() {
             this.history = [];
         }
