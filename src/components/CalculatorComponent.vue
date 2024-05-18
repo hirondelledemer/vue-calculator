@@ -79,7 +79,7 @@ export default {
     };
   },
   setup() {
-    const providedHistory = inject<HistoryEntry[]>('history2');
+    const providedHistory = inject<HistoryEntry[]>('history');
     return {
       Operation,
       providedHistory,

@@ -16,42 +16,26 @@
 import { provide, ref } from 'vue';
 import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
 
-interface HistoryData {
-  history: HistoryEntry[];
-}
-
 export default {
   components: {
     CalculatorComponent,
   },
-  data(): HistoryData {
-    return {
-      history: [],
-    };
-  },
-  setup() {
-    const history2 = ref<HistoryEntry[]>([]);
 
-    function addToHistory2(calculation: HistoryEntry) {
-      history2.value.push(calculation);
-      // title.value = 'Another string called from `ParentComponent.vue` in `ChildComponent.vue`';
+  setup() {
+    const history = ref<HistoryEntry[]>([]);
+
+    function addToHistory(calculation: HistoryEntry) {
+      history.value.push(calculation);
     }
 
-    // Provide the title to ChildComponent outside the setup function
-    provide('history2', history2);
+    provide('history', history);
 
     return {
-      history2,
-      addToHistory2,
+      history,
+      addToHistory,
     };
   },
   methods: {
-    addToHistory(calculation: HistoryEntry) {
-      this.history.push(calculation);
-      this.addToHistory2(calculation);
-      this.$emit('calculated', calculation)
-    },
-
     exportHistory() {
       const dataStr = JSON.stringify(this.history);
       const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
