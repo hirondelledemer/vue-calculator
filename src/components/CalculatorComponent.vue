@@ -203,6 +203,8 @@ export default {
   overflow-wrap: break-word;
   padding: 6px;
   border-radius: 5px;
+  max-height: 150px;
+  overflow: auto;
 }
 
 .inputs {
