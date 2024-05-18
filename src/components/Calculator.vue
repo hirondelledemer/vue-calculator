@@ -28,7 +28,7 @@
         C
       </button>
       <button class="key num" @click="() => setNumber(0)">
-        *
+        0
       </button>
       <button class="key fn" @click="() => setOperator(Operation.divide)">
         /
