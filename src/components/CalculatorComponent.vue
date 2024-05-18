@@ -56,8 +56,8 @@ enum Operation {
 }
 
 interface CalculatorData {
-  num1: number;
-  num2: number;
+  num1: number | undefined;
+  num2: number | undefined;
   operation: Operation | undefined;
   result: null | number | string;
 }
@@ -71,8 +71,8 @@ export default {
 
   data(): CalculatorData {
     return {
-      num1: 0, // todo: maybe undefiend in order not to show 0
-      num2: 0,
+      num1: undefined,
+      num2: undefined,
       operation: undefined,
       result: null
     };
@@ -86,6 +86,9 @@ export default {
   },
   methods: {
     calculate() {
+      this.num1 = this.num1 || 0;
+      this.num2 = this.num2 || 0;
+
       switch (this.operation) {
         case Operation.plus:
           this.result = this.num1 + this.num2;
@@ -114,7 +117,7 @@ export default {
       });
 
       this.num1 = typeof this.result === 'number' ? this.result : 0;
-      this.num2 = 0;
+      this.num2 = undefined;
       this.operation = undefined;
     },
     setOperator: function (operation: Operation) {
@@ -222,6 +225,7 @@ export default {
   align-items: center;
   font-size: 40px;
   border-radius: 20%;
+  cursor: pointer;
 }
 
 .num {
