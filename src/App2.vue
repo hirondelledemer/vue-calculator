@@ -1,8 +1,17 @@
 <template>
     <div id="app">
-        <CalculatorComponent @calculated="addToHistory" ref="calculator" />
-        <ResultComponent :result="currentResult" @calculate="calculate" />
-        <HistoryComponent :history="history" @imported="importHistory" @cleared="clearHistory" />
+        <div>
+
+            <CalculatorComponent @calculated="addToHistory" ref="calculator" />
+        </div>
+        <div>
+
+            <ResultComponent :result="currentResult" @calculate="calculate" />
+        </div>
+        <div>
+
+            <HistoryComponent :history="history" @imported="importHistory" @cleared="clearHistory" />
+        </div>
     </div>
 </template>
   

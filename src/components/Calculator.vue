@@ -1,18 +1,43 @@
 <template>
-  <div>
-    <input v-model.number="num1" type="number" placeholder="Enter first number" />
-    <select v-model="operation">
-      <option value="sum">+</option>
-      <option value="minus">-</option>
-      <option value="multiply">*</option>
-      <option value="divide">/</option>
-    </select>
-    <input v-model.number="num2" type="number" placeholder="Enter second number" />
-    <button @click="calculate">Calculate</button>
+  <div class="container">
+    <div class="display">
+      <input v-model.number="num1" type="number" />
+      <!-- todo: fix this -->
+      {{ operation }}
+      <input v-model.number="num2" type="number" />
+    </div>
+
+    <div class="keypad">
+      <button class="key num" v-for="key in [1, 2, 3]" :key="key" @click="useNumber(key)">{{ key }}</button>
+      <button class="key fn" @click="() => setOperator('sum')">
+        +
+      </button>
+
+      <button class="key num" v-for="key in [4, 5, 6]" :key="key" @click="useNumber(key)">{{ key }}</button>
+      <button class="key fn" @click="() => setOperator('minus')">
+        -
+      </button>
+      <button class="key num" v-for="key in [7, 8, 9]" :key="key" @click="useNumber(key)">{{ key }}</button>
+      <button class="key fn" @click="() => setOperator('multiply')">
+        *
+      </button>
+
+      <button class="key fn" @click="() => console.log('clear')">
+        C
+      </button>
+      <button class="key num" @click="() => console.log('zero')">
+        *
+      </button>
+      <button class="key fn" @click="() => setOperator('divide')">
+        /
+      </button>
+      <button class="key fn" @click="calculate">=</button>
+    </div>
   </div>
 </template>
 
 <script>
+// todo: add types
 export default {
   data() {
     return {
@@ -48,7 +73,59 @@ export default {
         operation: this.operation,
         result: this.result
       });
+    },
+    setOperator: function (operation) { // todo: types
+      this.operation = operation
     }
   }
 };
 </script>
+
+<style scoped>
+.container {
+  width: 320px;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid #ebebeb;
+  border-radius: 5px;
+}
+
+.display {
+  flex: 1;
+  border: 2px solid #ebebeb;
+  margin: 10px;
+  text-align: right;
+  overflow-wrap: break-word;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.keypad {
+  height: 320px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 10px;
+}
+
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  border-radius: 20%;
+}
+
+.num {
+  background-color: #2f2f2f;
+  color: #ffffff;
+}
+
+.fn {
+  background-color: #464646;
+  color: #000000;
+}
+</style>
