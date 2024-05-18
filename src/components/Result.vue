@@ -12,7 +12,7 @@
 
 // todo: add types
 
-import HistoryComponent from './History.vue';
+import HistoryComponent from './HistoryComponent.vue';
 export default {
   components: {
     HistoryComponent

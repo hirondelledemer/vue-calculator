@@ -116,7 +116,7 @@ export default {
 <style scoped>
 .container {
   width: 320px;
-  height: 480px;
+  height: 416px;
   display: flex;
   flex-direction: column;
   margin-left: auto;
