@@ -45,12 +45,13 @@ export default {
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
     },
-    importHistory(event: any) { // todo: types
-      console.log(event.target);
-      const file = event.target.files[0];
-      if (file) {
+    importHistory(event: Event) {
+      const target = event.target as HTMLInputElement;
+
+      if (target && !!target.files) {
+        const file = target.files[0]
         const reader = new FileReader();
-        reader.onload = (e: any) => { // todo:types
+        reader.onload = (e: any) => {
           try {
             const importedHistory = JSON.parse(e.target.result);
             this.history = [...this.history, ...importedHistory.filter((entry: HistoryEntry) => entry.result !== null)];
@@ -72,8 +73,6 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  /* align-items: start; */
-
 }
 
 .historyActions {

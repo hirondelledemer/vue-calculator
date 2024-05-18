@@ -149,36 +149,6 @@ export default {
 }
 
 
-/* .input-sizer {
-  display: inline-grid;
-  vertical-align: top;
-  align-items: center;
-  position: relative;
-  border: solid 1px;
-  padding: .25em .5em;
-  margin: 5px;
-
-  &::after,
-  .input {
-    width: auto;
-    min-width: 1em;
-    grid-area: 1 / 2;
-    font: inherit;
-    padding: 0.25em;
-    margin: 0;
-    resize: none;
-    background: none;
-    appearance: none;
-    border: none;
-  }
-
-  &::after {
-    content: attr(data-value) ' ';
-    visibility: hidden;
-    white-space: pre-wrap;
-  }
-} */
-
 .input {
   border: none;
   background-color: transparent;
