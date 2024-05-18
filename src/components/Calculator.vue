@@ -11,16 +11,16 @@
 
     <div class="keypad">
       <button class="key num" v-for="key in [1, 2, 3]" :key="key" @click="setNumber(key)">{{ key }}</button>
-      <button class="key fn" @click="() => setOperator('sum')">
+      <button class="key fn" @click="() => setOperator(Operation.plus)">
         +
       </button>
 
       <button class="key num" v-for="key in [4, 5, 6]" :key="key" @click="setNumber(key)">{{ key }}</button>
-      <button class="key fn" @click="() => setOperator('minus')">
+      <button class="key fn" @click="() => setOperator(Operation.minus)">
         -
       </button>
       <button class="key num" v-for="key in [7, 8, 9]" :key="key" @click="setNumber(key)">{{ key }}</button>
-      <button class="key fn" @click="() => setOperator('multiply')">
+      <button class="key fn" @click="() => setOperator(Operation.multiply)">
         *
       </button>
 
@@ -30,7 +30,7 @@
       <button class="key num" @click="() => setNumber(0)">
         *
       </button>
-      <button class="key fn" @click="() => setOperator('divide')">
+      <button class="key fn" @click="() => setOperator(Operation.divide)">
         /
       </button>
       <button class="key fn" @click="calculate">=</button>
@@ -38,10 +38,22 @@
   </div>
 </template>
 
-<script>
-// todo: add types
+<script lang="ts">
+enum Operation {
+  minus = '-',
+  plus = '+',
+  multiply = '*',
+  divide = '/',
+}
+
+interface CalculatorData {
+  num1: number;
+  num2: number;
+  operation: Operation | undefined;
+  result: null | number | string;
+}
 export default {
-  data() {
+  data(): CalculatorData {
     return {
       num1: 0,
       num2: 0,
@@ -49,37 +61,48 @@ export default {
       result: null
     };
   },
+  setup() {
+    return {
+      Operation,
+    };
+  },
   methods: {
     calculate() {
       switch (this.operation) {
-        case 'sum':
+        case Operation.plus:
           this.result = this.num1 + this.num2;
           break;
-        case 'minus':
+        case Operation.minus:
           this.result = this.num1 - this.num2;
           break;
-        case 'multiply':
+        case Operation.multiply:
           this.result = this.num1 * this.num2;
           break;
-        case 'divide':
+        case Operation.divide:
           if (this.num2 !== 0) {
             this.result = this.num1 / this.num2;
           } else {
             this.result = 'Error: Division by zero';
           }
           break;
+
       }
+
       this.$emit('calculated', {
         num1: this.num1,
         num2: this.num2,
         operation: this.operation,
         result: this.result
       });
+
+      this.num1 = typeof this.result === 'number' ? this.result : 0;
+      this.num2 = 0;
+      this.operation = undefined;
     },
-    setOperator: function (operation) { // todo: types
+    setOperator: function (operation: Operation) {
       this.operation = operation
     },
-    setNumber: function (number) { // todo: types
+    setNumber: function (number: number) {
       if (this.operation) {
         this.num2 = number;
         return;

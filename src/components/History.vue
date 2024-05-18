@@ -2,7 +2,7 @@
     <div>
         <ul>
             <li v-for="(entry, index) in history" :key="index">
-                {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
+                {{ entry.num1 }} {{ entry.operation }} {{ entry.num2 }} = {{ entry.result }}
             </li>
         </ul>
         <button @click="exportHistory">Export History</button>
@@ -11,18 +11,11 @@
     </div>
 </template>
   
-<script>
+<script lang="ts">
+
 export default {
     props: ['history'],
     methods: {
-        getOperationSymbol(operation) {
-            switch (operation) {
-                case 'sum': return '+';
-                case 'minus': return '-';
-                case 'multiply': return '*';
-                case 'divide': return '/';
-            }
-        },
         exportHistory() {
             const dataStr = JSON.stringify(this.history);
             const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -32,11 +25,11 @@ export default {
             linkElement.setAttribute('download', exportFileDefaultName);
             linkElement.click();
         },
-        importHistory(event) {
+        importHistory(event: any) { // todo: types
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = (e: any) => { // todo:types
                     try {
                         const importedHistory = JSON.parse(e.target.result);
                         this.$emit('imported', importedHistory);

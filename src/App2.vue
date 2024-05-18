@@ -34,6 +34,8 @@ export default {
     },
     methods: {
         addToHistory(calculation) {
+
+            console.log(calculation)
             this.history.push(calculation);
             this.currentResult = calculation.result;
         },
