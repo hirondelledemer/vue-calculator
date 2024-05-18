@@ -1,12 +1,19 @@
 <template>
   <div class="container">
     <div class="display">
-      <div class="input-sizer">
-        <input class="input" v-model.number="num1" type="number" />
+      <!-- {{ providedHistory }} -->
+      <div v-for="(entry, index) in providedHistory" :key="index">
+        {{ entry.num1 }} {{ entry.operation }} {{ entry.num2 }} = {{ entry.result }}
       </div>
-      <!-- todo: fix this -->
-      {{ operation }}
-      <input class="input" v-model.number="num2" type="number" />
+      <div class="inputs">
+        <div class="input-sizer">
+          <input class="input" v-model.number="num1" type="number" />
+        </div>
+        <!-- todo: fix this -->
+        {{ operation }}
+        <input class="input" v-model.number="num2" type="number" />
+
+      </div>
     </div>
 
     <div class="keypad">
@@ -39,6 +46,8 @@
 </template>
 
 <script lang="ts">
+import { inject } from 'vue';
+
 enum Operation {
   minus = '-',
   plus = '+',
@@ -52,7 +61,14 @@ interface CalculatorData {
   operation: Operation | undefined;
   result: null | number | string;
 }
+interface HistoryEntry {
+  num1: number;
+  num2: number;
+  operation: string; // todo
+  result: number; // todo
+}
 export default {
+
   data(): CalculatorData {
     return {
       num1: 0, // todo: maybe undefiend in order not to show 0
@@ -62,8 +78,10 @@ export default {
     };
   },
   setup() {
+    const providedHistory = inject<HistoryEntry[]>('history2');
     return {
       Operation,
+      providedHistory,
     };
   },
   methods: {
@@ -175,13 +193,19 @@ export default {
 
 .display {
   display: flex;
-  justify-content: end;
+  flex-direction: column;
   border: 2px solid #ebebeb;
   margin: 10px;
   text-align: right;
   overflow-wrap: break-word;
   padding: 6px;
   border-radius: 5px;
+}
+
+.inputs {
+  display: flex;
+  justify-content: end;
+  margin-top: 6px;
 }
 
 .keypad {

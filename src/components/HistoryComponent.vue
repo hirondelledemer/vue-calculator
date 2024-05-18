@@ -1,18 +1,19 @@
 <template>
-  <CalculatorComponent @calculated="addToHistory" ref="calculator" />
-  <div>
-    <ul>
-      <li v-for="(entry, index) in history" :key="index">
-        {{ entry.num1 }} {{ entry.operation }} {{ entry.num2 }} = {{ entry.result }}
-      </li>
-    </ul>
-    <button @click="exportHistory">Export History</button>
-    <input type="file" @change="importHistory" />
-    <button @click="clearHistory">Clear History</button>
+  <div class="container">
+    <CalculatorComponent @calculated="addToHistory" ref="calculator" />
+    <div class="historyActions">
+      <button class="button" @click="clearHistory">Clear History</button>
+      <button class="button" @click="exportHistory">Export History</button>
+      <label for="file-upload" class="button fileButton">
+        Import History
+      </label>
+      <input id="file-upload" type="file" @change="importHistory" />
+    </div>
   </div>
 </template>
   
 <script lang="ts">
+import { provide, ref } from 'vue';
 import CalculatorComponent from './CalculatorComponent.vue';
 
 interface HistoryEntry {
@@ -36,9 +37,26 @@ export default {
       history: [],
     };
   },
+  setup() {
+    const history2 = ref<HistoryEntry[]>([]);
+
+    function addToHistory2(calculation: HistoryEntry) {
+      history2.value.push(calculation);
+      // title.value = 'Another string called from `ParentComponent.vue` in `ChildComponent.vue`';
+    }
+
+    // Provide the title to ChildComponent outside the setup function
+    provide('history2', history2);
+
+    return {
+      history2,
+      addToHistory2,
+    };
+  },
   methods: {
     addToHistory(calculation: HistoryEntry) {
       this.history.push(calculation);
+      this.addToHistory2(calculation);
       this.$emit('calculated', calculation)
     },
 
@@ -75,3 +93,40 @@ export default {
 };
 </script>
   
+<style scoped>
+.container {
+  display: flex;
+  /* align-items: start; */
+
+}
+
+.historyActions {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 12px;
+}
+
+.button {
+  border: 2px solid #545454;
+  border-radius: 5px;
+  background-color: #2f2f2f;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.fileButton {
+  display: inline-block;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.button+.button {
+  margin-top: 6px
+}
+</style>
