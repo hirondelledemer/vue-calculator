@@ -1,47 +1,41 @@
 <template>
-  <CalculatorComponent @calculated="addToHistory" ref="calculator" />
-  <div>
-    <ul>
-      <li v-for="(entry, index) in history" :key="index">
-        {{ entry.num1 }} {{ entry.operation }} {{ entry.num2 }} = {{ entry.result }}
-      </li>
-    </ul>
-    <button @click="exportHistory">Export History</button>
-    <input type="file" @change="importHistory" />
-    <button @click="clearHistory">Clear History</button>
+  <div class="container">
+    <CalculatorComponent @calculated="addToHistory" ref="calculator" />
+    <div class="historyActions">
+      <button class="button" @click="clearHistory">Clear History</button>
+      <button class="button" @click="exportHistory">Export History</button>
+      <label for="file-upload" class="button fileButton">
+        Import History
+      </label>
+      <input id="file-upload" type="file" @change="importHistory" />
+    </div>
   </div>
 </template>
   
 <script lang="ts">
-import CalculatorComponent from './CalculatorComponent.vue';
-
-interface HistoryEntry {
-  num1: number;
-  num2: number;
-  operation: string; // todo
-  result: number; // todo
-}
-
-interface HistoryData {
-  history: HistoryEntry[];
-}
-
+import { provide, ref } from 'vue';
+import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
 
 export default {
   components: {
     CalculatorComponent,
   },
-  data(): HistoryData {
+
+  setup() {
+    const history = ref<HistoryEntry[]>([]);
+
+    function addToHistory(calculation: HistoryEntry) {
+      history.value.push(calculation);
+    }
+
+    provide('history', history);
+
     return {
-      history: [],
+      history,
+      addToHistory,
     };
   },
   methods: {
-    addToHistory(calculation: HistoryEntry) {
-      this.history.push(calculation);
-      this.$emit('calculated', calculation)
-    },
-
     exportHistory() {
       const dataStr = JSON.stringify(this.history);
       const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -51,12 +45,13 @@ export default {
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
     },
-    importHistory(event: any) { // todo: types
-      console.log(event.target);
-      const file = event.target.files[0];
-      if (file) {
+    importHistory(event: Event) {
+      const target = event.target as HTMLInputElement;
+
+      if (target && !!target.files) {
+        const file = target.files[0]
         const reader = new FileReader();
-        reader.onload = (e: any) => { // todo:types
+        reader.onload = (e: any) => {
           try {
             const importedHistory = JSON.parse(e.target.result);
             this.history = [...this.history, ...importedHistory.filter((entry: HistoryEntry) => entry.result !== null)];
@@ -75,3 +70,38 @@ export default {
 };
 </script>
   
+<style scoped>
+.container {
+  display: flex;
+}
+
+.historyActions {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 12px;
+}
+
+.button {
+  border: 2px solid #545454;
+  border-radius: 5px;
+  background-color: #2f2f2f;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.fileButton {
+  display: inline-block;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.button+.button {
+  margin-top: 6px
+}
+</style>
