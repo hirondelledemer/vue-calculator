@@ -48,7 +48,7 @@
 <script lang="ts">
 import { inject } from 'vue';
 
-enum Operation {
+export enum Operation {
   minus = '-',
   plus = '+',
   multiply = '*',
@@ -61,11 +61,12 @@ interface CalculatorData {
   operation: Operation | undefined;
   result: null | number | string;
 }
-interface HistoryEntry {
+
+export interface HistoryEntry {
   num1: number;
   num2: number;
-  operation: string; // todo
-  result: number; // todo
+  operation: Operation;
+  result: number;
 }
 export default {
 
@@ -125,10 +126,11 @@ export default {
     },
     setNumber: function (number: number) {
       if (this.operation) {
-        this.num2 = number;
+        this.num2 = (this.num2 || 0) * 10 + number;
         return;
       }
-      this.num1 = number;
+
+      this.num1 = (this.num1 || 0) * 10 + number;
     }
   }
 }

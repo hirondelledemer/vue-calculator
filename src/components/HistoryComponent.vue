@@ -14,19 +14,11 @@
   
 <script lang="ts">
 import { provide, ref } from 'vue';
-import CalculatorComponent from './CalculatorComponent.vue';
-
-interface HistoryEntry {
-  num1: number;
-  num2: number;
-  operation: string; // todo
-  result: number; // todo
-}
+import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
 
 interface HistoryData {
   history: HistoryEntry[];
 }
-
 
 export default {
   components: {
