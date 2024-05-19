@@ -3,99 +3,56 @@ import { expect, test } from 'vitest'
 import CalculatorComponent from './CalculatorComponent.vue'
 
 test('completes basic addition', async () => {
+  const driver = getDriver()
   render(CalculatorComponent)
 
-  const num1 = screen.getByRole('button', {
-    name: /1/i
-  })
-  const plus = screen.getByRole('button', {
-    name: /\+/i
-  })
-  const num2 = screen.getByRole('button', {
-    name: /5/i
-  })
-  const eq = screen.getByRole('button', {
-    name: /=/i
-  })
-  const [input1, input2] = screen.getAllByRole('spinbutton')
+  await fireEvent.click(driver.getButtonByName('1'))
+  await fireEvent.click(driver.getButtonByName('+'))
+  await fireEvent.click(driver.getButtonByName('5'))
+  await fireEvent.click(driver.getButtonByName('='))
 
-  await fireEvent.click(num1)
-  await fireEvent.click(plus)
-  await fireEvent.click(num2)
-  await fireEvent.click(eq)
-
-  expect(input1.value).toBe('6')
-  expect(input2.value).toBe('')
+  expect(driver.getInputAt(0).value).toBe('6')
+  expect(driver.getInputAt(1).value).toBe('')
 })
 
 test('should allow continue calculations based on previous result', async () => {
+  const driver = getDriver()
   render(CalculatorComponent)
 
-  const num1 = screen.getByRole('button', {
-    name: /1/i
-  })
-  const plus = screen.getByRole('button', {
-    name: /\+/i
-  })
-  const minus = screen.getByRole('button', {
-    name: /\-/i
-  })
-  const num2 = screen.getByRole('button', {
-    name: /5/i
-  })
-  const eq = screen.getByRole('button', {
-    name: /=/i
-  })
-  const [input1, input2] = screen.getAllByRole('spinbutton')
+  await fireEvent.click(driver.getButtonByName('1'))
+  await fireEvent.click(driver.getButtonByName('+'))
+  await fireEvent.click(driver.getButtonByName('5'))
+  await fireEvent.click(driver.getButtonByName('='))
+  await fireEvent.click(driver.getButtonByName('-'))
+  await fireEvent.click(driver.getButtonByName('1'))
+  await fireEvent.click(driver.getButtonByName('='))
 
-  await fireEvent.click(num1)
-  await fireEvent.click(plus)
-  await fireEvent.click(num2)
-  await fireEvent.click(eq)
-  await fireEvent.click(minus)
-  await fireEvent.click(num1)
-  await fireEvent.click(eq)
-
-  expect(input1.value).toBe('5')
-  expect(input2.value).toBe('')
+  expect(driver.getInputAt(0).value).toBe('5')
+  expect(driver.getInputAt(1).value).toBe('')
 })
 
 test('should delete result and do new calculation', async () => {
+  const driver = getDriver()
   render(CalculatorComponent)
 
-  const num1 = screen.getByRole('button', {
-    name: /1/i
-  })
-  const plus = screen.getByRole('button', {
-    name: /\+/i
-  })
-  const minus = screen.getByRole('button', {
-    name: /\-/i
-  })
-  const num2 = screen.getByRole('button', {
-    name: /5/i
-  })
-  const num3 = screen.getByRole('button', {
-    name: /7/i
-  })
-  const eq = screen.getByRole('button', {
-    name: /=/i
-  })
-  const clear = screen.getByRole('button', {
-    name: /c/i
-  })
-  const [input1, input2] = screen.getAllByRole('spinbutton')
+  await fireEvent.click(driver.getButtonByName('1'))
+  await fireEvent.click(driver.getButtonByName('+'))
+  await fireEvent.click(driver.getButtonByName('5'))
+  await fireEvent.click(driver.getButtonByName('='))
+  await fireEvent.click(driver.getButtonByName('C'))
+  await fireEvent.click(driver.getButtonByName('7'))
+  await fireEvent.click(driver.getButtonByName('-'))
+  await fireEvent.click(driver.getButtonByName('1'))
+  await fireEvent.click(driver.getButtonByName('='))
 
-  await fireEvent.click(num1)
-  await fireEvent.click(plus)
-  await fireEvent.click(num2)
-  await fireEvent.click(eq)
-  await fireEvent.click(clear)
-  await fireEvent.click(num3)
-  await fireEvent.click(minus)
-  await fireEvent.click(num1)
-  await fireEvent.click(eq)
+  expect(driver.getInputAt(0).value).toBe('6')
+  expect(driver.getInputAt(1).value).toBe('')
+})
 
-  expect(input1.value).toBe('6')
-  expect(input2.value).toBe('')
+const getDriver = () => ({
+  getButtonByName: (name: string) =>
+    screen.getByRole('button', {
+      name
+    }),
+  getInputAt: (index: number) => screen.getAllByRole<HTMLInputElement>('spinbutton')[index]
 })
