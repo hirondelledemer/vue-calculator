@@ -14,27 +14,24 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import { ref, defineExpose, defineEmits } from 'vue'
+import { ref, defineEmits } from 'vue'
 
-import CalculatorComponent from './CalculatorComponent.vue';
+import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
 const emit = defineEmits(['finished'])
-const child = ref(null);
-const modelValue = ref([]);
+const child = ref<InstanceType<typeof CalculatorComponent>>();
+const modelValue = ref<HistoryEntry[]>([]); //todo rename
 
-function handleCalculated(calculation) {
-
-
+function handleCalculated(calculation: HistoryEntry) {
   emit('finished', calculation.result)
 }
 
 function calculate() {
-
-  child.value.calculate();
+  child.value!.calculate();
 }
 
-function getOperationSymbol(operation) {
+function getOperationSymbol(operation: string) {
   switch (operation) {
     case 'sum': return '+';
     case 'minus': return '-';
@@ -44,15 +41,15 @@ function getOperationSymbol(operation) {
 }
 
 function exportHistory() {
-  child.value.exportHistory();
+  child.value!.exportHistory();
 }
 
-function importHistory(event) {
-  child.value.importHistory(event);
+function importHistory(event: Event) {
+  child.value!.importHistory(event);
 }
 
 function clearHistory() {
-  child.value.clearHistory();
+  child.value!.clearHistory();
 }
 
 

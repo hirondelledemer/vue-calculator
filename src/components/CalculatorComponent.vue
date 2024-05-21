@@ -11,24 +11,32 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
+import { ref, defineEmits, defineModel } from 'vue'
 
-import { ref, defineExpose, defineEmits, defineModel } from 'vue'
+export type Result = number | null | string;
+export interface HistoryEntry {
+  num1: number;
+  num2: number;
+  operation: string;
+  result: Result;
+}
 
-const num1 = ref(0)
-const num2 = ref(0)
-const operation = ref('sum')
-const result = ref(null)
-const history = defineModel('history', { default: [] })
+const num1 = ref<number>(0)
+const num2 = ref<number>(0)
+const operation = ref<string>('sum')
+const result = ref<Result>(null)
+const history = defineModel<HistoryEntry[]>('history', { default: [] })
+
 const emit = defineEmits(['calculated'])
 
-function addToHistory(calculation) {
+function addToHistory(calculation: HistoryEntry) {
   history.value.push(calculation);
 }
 
 function exportHistory() {
-  const dataStr = JSON.stringify(history);
+  const dataStr = JSON.stringify(history.value);
   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
   const exportFileDefaultName = 'history.json';
   let linkElement = document.createElement('a');
@@ -39,14 +47,18 @@ function exportHistory() {
 function clearHistory() {
   history.value = [];
 }
-function importHistory(event) {
-  const file = event.target.files[0];
-  if (file) {
+function importHistory(event: Event) {
+  const target = event.target as HTMLInputElement;
+
+
+  if (target && !!target.files) {
+    const file = target.files[0]
     const reader = new FileReader();
-    reader.onload = (e) => {
+
+    reader.onload = (e: any) => {
       try {
         const importedHistory = JSON.parse(e.target.result);
-        history.value = [...importedHistory.filter(entry => entry.result !== null)];
+        history.value = [...importedHistory.filter((entry: HistoryEntry) => entry.result !== null)];
       } catch (error) {
         console.error('Error importing history', error);
       }
