@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HistoryComponent @calculated="addResult" ref="calculator" />
+    <HistoryComponent @finished="addResult" ref="child" />
     <button @click="calculateResult">Calculate</button>
     <div v-if="result !== null">
       Result: {{ currentResult }}
@@ -8,31 +8,21 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
 import HistoryComponent from './HistoryComponent.vue';
 
-export default {
-  components: {
-    HistoryComponent
-  },
-  data() {
-    return {
-      currentResult: null
-    };
-  },
-  methods: {
+const currentResult = ref(null)
+const child = ref(null)
 
-    addResult(result) {
+function addResult(result) {
 
-      console.log('here')
-      this.currentResult = result;
-    },
+  console.log('here')
+  currentResult.value = result;
+}
 
+function calculateResult() {
+  child.value.calculate();
+}
 
-    calculateResult() {
-      console.log(this.$refs)
-      this.$refs.calculator.calculate();
-    },
-  }
-};
 </script>

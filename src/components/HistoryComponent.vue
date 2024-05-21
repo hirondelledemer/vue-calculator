@@ -1,9 +1,9 @@
 <template>
   <div>
-    <CalculatorComponent ref="calculator" @calculated="handleCalculated" />
-    <div v-if="!!this.$refs.calculator">
+    <CalculatorComponent ref="child" @calculated="handleCalculated" v-model:history="modelValue" />
+    <div>
       <ul>
-        <li v-for="(entry, index) in this.$refs.calculator.history" :key="index">
+        <li v-for="(entry, index) in modelValue" :key="index">
           {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
         </li>
       </ul>
@@ -14,47 +14,49 @@
   </div>
 </template>
 
-<script>
+<script setup>
+
+import { ref, defineExpose, defineEmits } from 'vue'
 
 import CalculatorComponent from './CalculatorComponent.vue';
+const emit = defineEmits(['finished'])
+const child = ref(null);
+const modelValue = ref([]);
 
-export default {
-  components: {
-    CalculatorComponent,
-  },
-  // data() {
-  //   return {
-  //     history: []
-  //   }
-  // },
-  methods: {
-    handleCalculated(calculation) {
+function handleCalculated(calculation) {
 
-      this.$emit('finished', calculation.result)
-    },
-    calculate() {
 
-      this.$refs.calculator.calculate();
+  emit('finished', calculation.result)
+}
 
-    },
-    getOperationSymbol(operation) {
-      switch (operation) {
-        case 'sum': return '+';
-        case 'minus': return '-';
-        case 'multiply': return '*';
-        case 'divide': return '/';
-      }
-    },
-    exportHistory() {
-      this.$refs.calculator.exportHistory();
-    },
+function calculate() {
 
-    importHistory(event) {
-      this.$refs.calculator.importHistory(event);
-    },
-    clearHistory() {
-      this.$refs.calculator.clearHistory();
-    },
+  child.value.calculate();
+}
+
+function getOperationSymbol(operation) {
+  switch (operation) {
+    case 'sum': return '+';
+    case 'minus': return '-';
+    case 'multiply': return '*';
+    case 'divide': return '/';
   }
-};
+}
+
+function exportHistory() {
+  child.value.exportHistory();
+}
+
+function importHistory(event) {
+  child.value.importHistory(event);
+}
+
+function clearHistory() {
+  child.value.clearHistory();
+}
+
+
+defineExpose({
+  calculate
+})
 </script>
