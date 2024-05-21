@@ -8,7 +8,6 @@
       <option value="divide">/</option>
     </select>
     <input v-model.number="num2" type="number" placeholder="Enter second number" />
-    <button @click="calculate">Calculate</button>
   </div>
 </template>
 

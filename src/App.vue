@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <ResultComponent :result="currentResult" @calculate="calculate" />
-    <HistoryComponent @imported="importHistory" @cleared="clearHistory" @finished="addResult" ref="calculator" />
+    <HistoryComponent @finished="addResult" ref="calculator" />
   </div>
 </template>
 
@@ -27,12 +27,6 @@ export default {
       console.log(this.$refs)
       this.$refs.calculator.calculate();
     },
-    importHistory(importedHistory) {
-      this.history = [...this.history, ...importedHistory.filter(entry => entry.result !== null)];
-    },
-    clearHistory() {
-      this.history = [];
-    }
   }
 };
 </script>

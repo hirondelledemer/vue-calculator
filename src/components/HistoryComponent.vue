@@ -53,6 +53,9 @@ export default {
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
     },
+    clearHistory() {
+      this.history = [];
+    },
     importHistory(event) {
       const file = event.target.files[0];
       if (file) {
@@ -60,7 +63,7 @@ export default {
         reader.onload = (e) => {
           try {
             const importedHistory = JSON.parse(e.target.result);
-            this.$emit('imported', importedHistory);
+            this.history = [...this.history, ...importedHistory.filter(entry => entry.result !== null)];
           } catch (error) {
             console.error('Error importing history', error);
           }
@@ -68,9 +71,6 @@ export default {
         reader.readAsText(file);
       }
     },
-    clearHistory() {
-      this.$emit('cleared');
-    }
   }
 };
 </script>
