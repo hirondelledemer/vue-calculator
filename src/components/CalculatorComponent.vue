@@ -18,10 +18,41 @@ export default {
       num1: 0,
       num2: 0,
       operation: 'sum',
-      result: null
+      result: null,
+      history: []
     };
   },
   methods: {
+    addToHistory(calculation) {
+      this.history.push(calculation);
+    },
+    exportHistory() {
+      const dataStr = JSON.stringify(this.history);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      const exportFileDefaultName = 'history.json';
+      let linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    },
+    clearHistory() {
+      this.history = [];
+    },
+    importHistory(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const importedHistory = JSON.parse(e.target.result);
+            this.history = [...this.history, ...importedHistory.filter(entry => entry.result !== null)];
+          } catch (error) {
+            console.error('Error importing history', error);
+          }
+        };
+        reader.readAsText(file);
+      }
+    },
     calculate() {
       switch (this.operation) {
         case 'sum':
@@ -41,12 +72,20 @@ export default {
           }
           break;
       }
-      this.$emit('calculated', {
+
+      this.addToHistory({
         num1: this.num1,
         num2: this.num2,
         operation: this.operation,
         result: this.result
       });
+
+      this.$emit('calculated', {
+        num1: this.num1,
+        num2: this.num2,
+        operation: this.operation,
+        result: this.result
+      })
     }
   }
 };

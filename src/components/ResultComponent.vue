@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HistoryComponent @finished="addResult" ref="calculator" />
+    <HistoryComponent @calculated="addResult" ref="calculator" />
     <button @click="calculateResult">Calculate</button>
     <div v-if="result !== null">
       Result: {{ currentResult }}
@@ -23,6 +23,8 @@ export default {
   methods: {
 
     addResult(result) {
+
+      console.log('here')
       this.currentResult = result;
     },
 
