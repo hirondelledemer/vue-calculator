@@ -1,9 +1,9 @@
 <template>
   <div>
-    <CalculatorComponent ref="child" @calculated="handleCalculated" v-model:history="modelValue" />
+    <CalculatorComponent ref="child" @calculated="handleCalculated" v-model:history="historyValue" />
     <div>
       <ul>
-        <li v-for="(entry, index) in modelValue" :key="index">
+        <li v-for="(entry, index) in historyValue" :key="index">
           {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
         </li>
       </ul>
@@ -21,7 +21,7 @@ import { ref, defineEmits } from 'vue'
 import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
 const emit = defineEmits(['finished'])
 const child = ref<InstanceType<typeof CalculatorComponent>>();
-const modelValue = ref<HistoryEntry[]>([]); //todo rename
+const historyValue = ref<HistoryEntry[]>([]);
 
 const handleCalculated = (calculation: HistoryEntry) => {
   emit('finished', calculation.result)
