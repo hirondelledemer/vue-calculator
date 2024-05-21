@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import ResultComponent from './components/ResultComponent.vue';
 
 export default {
