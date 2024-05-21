@@ -1,19 +1,36 @@
 <template>
   <div>
+    <HistoryComponent @finished="addResult" ref="calculator" />
     <button @click="calculateResult">Calculate</button>
     <div v-if="result !== null">
-      Result: {{ result }}
+      Result: {{ currentResult }}
     </div>
   </div>
 </template>
 
 <script>
+import HistoryComponent from './HistoryComponent.vue';
+
 export default {
-  props: ['result'],
+  components: {
+    HistoryComponent
+  },
+  data() {
+    return {
+      currentResult: null
+    };
+  },
   methods: {
+
+    addResult(result) {
+      this.currentResult = result;
+    },
+
+
     calculateResult() {
-      this.$emit('calculate');
-    }
+      console.log(this.$refs)
+      this.$refs.calculator.calculate();
+    },
   }
 };
 </script>
