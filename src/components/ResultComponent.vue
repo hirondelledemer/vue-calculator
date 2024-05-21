@@ -16,14 +16,15 @@ import { type Result } from './CalculatorComponent.vue';
 const currentResult = ref<Result>(null)
 const child = ref<InstanceType<typeof HistoryComponent>>()
 
-function addResult(result: Result) {
+const addResult = (result: Result) => {
   currentResult.value = result;
 }
 
-function calculateResult() {
+const calculateResult = () => {
   child.value!.calculate();
 }
 
 </script>
+<!-- todo -->
 <!-- types to emit 
 design -->

@@ -23,15 +23,15 @@ const emit = defineEmits(['finished'])
 const child = ref<InstanceType<typeof CalculatorComponent>>();
 const modelValue = ref<HistoryEntry[]>([]); //todo rename
 
-function handleCalculated(calculation: HistoryEntry) {
+const handleCalculated = (calculation: HistoryEntry) => {
   emit('finished', calculation.result)
 }
 
-function calculate() {
+const calculate = () => {
   child.value!.calculate();
 }
 
-function getOperationSymbol(operation: string) {
+const getOperationSymbol = (operation: string) => {
   switch (operation) {
     case 'sum': return '+';
     case 'minus': return '-';
@@ -40,15 +40,15 @@ function getOperationSymbol(operation: string) {
   }
 }
 
-function exportHistory() {
+const exportHistory = () => {
   child.value!.exportHistory();
 }
 
-function importHistory(event: Event) {
+const importHistory = (event: Event) => {
   child.value!.importHistory(event);
 }
 
-function clearHistory() {
+const clearHistory = () => {
   child.value!.clearHistory();
 }
 

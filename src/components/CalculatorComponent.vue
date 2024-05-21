@@ -31,11 +31,11 @@ const history = defineModel<HistoryEntry[]>('history', { default: [] })
 
 const emit = defineEmits(['calculated'])
 
-function addToHistory(calculation: HistoryEntry) {
+const addToHistory = (calculation: HistoryEntry) => {
   history.value.push(calculation);
 }
 
-function exportHistory() {
+const exportHistory = () => {
   const dataStr = JSON.stringify(history.value);
   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
   const exportFileDefaultName = 'history.json';
@@ -44,10 +44,11 @@ function exportHistory() {
   linkElement.setAttribute('download', exportFileDefaultName);
   linkElement.click();
 }
-function clearHistory() {
+
+const clearHistory = () => {
   history.value = [];
 }
-function importHistory(event: Event) {
+const importHistory = (event: Event) => {
   const target = event.target as HTMLInputElement;
 
 
@@ -66,7 +67,8 @@ function importHistory(event: Event) {
     reader.readAsText(file);
   }
 }
-function calculate() {
+
+const calculate = () => {
   switch (operation.value) {
     case 'sum':
       result.value = num1.value + num2.value;
@@ -86,20 +88,15 @@ function calculate() {
       break;
   }
 
-  addToHistory({
+  const historyEntry: HistoryEntry = {
     num1: num1.value,
     num2: num2.value,
     operation: operation.value,
     result: result.value
-  });
 
-
-  emit('calculated', {
-    num1: num1.value,
-    num2: num2.value,
-    operation: operation.value,
-    result: result.value
-  })
+  }
+  addToHistory(historyEntry);
+  emit('calculated', historyEntry)
 }
 
 defineExpose({
@@ -109,6 +106,5 @@ defineExpose({
   clearHistory,
   addToHistory,
   exportHistory,
-
 })
 </script>
