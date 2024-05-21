@@ -1,5 +1,6 @@
 <template>
   <div>
+    <CalculatorComponent @calculated="addToHistory" ref="calculator" />
     <ul>
       <li v-for="(entry, index) in history" :key="index">
         {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
@@ -12,9 +13,29 @@
 </template>
 
 <script>
+
+import CalculatorComponent from './CalculatorComponent.vue';
+
 export default {
-  props: ['history'],
+  components: {
+    CalculatorComponent,
+  },
+
+  data() {
+    return {
+      history: [],
+    };
+  },
+
   methods: {
+    addToHistory(calculation) {
+      this.history.push(calculation);
+      this.$emit('finished', calculation.result)
+    },
+    calculate() {
+      // todo: make it smarter
+      this.$refs.calculator.calculate();
+    },
     getOperationSymbol(operation) {
       switch (operation) {
         case 'sum': return '+';
