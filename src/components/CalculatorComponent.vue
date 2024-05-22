@@ -48,9 +48,9 @@ const exportHistory = () => {
 const clearHistory = () => {
   history.value = [];
 }
+
 const importHistory = (event: Event) => {
   const target = event.target as HTMLInputElement;
-
 
   if (target && !!target.files) {
     const file = target.files[0]
@@ -87,8 +87,6 @@ const calculateResult = () => {
       }
       break;
   }
-
-
 }
 
 const calculate = () => {
@@ -111,6 +109,7 @@ const setValuesFromHistory = (index: number) => {
   operation.value = historyEntry.operation
   result.value = historyEntry.result
   calculateResult();
+  emit('calculated', historyEntry);
 }
 
 defineExpose({

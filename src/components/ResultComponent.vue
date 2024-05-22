@@ -27,7 +27,6 @@ const addResult = (result: Result) => {
 const calculateResult = () => {
   child.value!.calculate();
 }
-
 </script>
 
 

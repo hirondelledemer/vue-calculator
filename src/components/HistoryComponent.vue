@@ -28,6 +28,7 @@
 import { ref, defineEmits } from 'vue'
 
 import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
+
 const emit = defineEmits(['finished'])
 const child = ref<InstanceType<typeof CalculatorComponent>>();
 const historyValue = ref<HistoryEntry[]>([]);
@@ -64,8 +65,6 @@ const clearHistory = () => {
 const setValuesFromHistory = (index: number) => {
   child.value!.setValuesFromHistory(index);
 }
-
-
 
 defineExpose({
   calculate
