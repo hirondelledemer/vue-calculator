@@ -9,8 +9,8 @@ describe('history action buttons', () => {
     render(ResultComponent)
 
     expect(driver.getImportHistoryButton()).not.toBeNull()
-    expect(driver.getExportHistoryButton()).toBeNull()
-    expect(driver.getClearHistoryButton()).toBeNull()
+    expect(driver.getButtonExists('Export History')).toBe(false)
+    expect(driver.getButtonExists('Clear History')).toBe(false)
   })
 
   test('should show history if calculations have been made', async () => {
@@ -35,13 +35,13 @@ describe('history', () => {
 
     await driver.setInputAt(0, '4')
     await driver.setInputAt(1, '5')
-    await fireEvent.click(driver.getButtonByName('Calculate'))
+    await fireEvent.click(driver.getCalculateButton())
 
-    expect(driver.getLabelByText(equation)).not.toBeNull()
+    expect(driver.getLabelExists(equation)).toBe(true)
 
     await fireEvent.click(driver.getClearHistoryButton())
 
-    expect(driver.getLabelByText(equation)).toBeNull()
+    expect(driver.getLabelExists(equation)).toBe(false)
   })
 
   test('should go back to history', async () => {
@@ -92,24 +92,25 @@ describe('result', () => {
 })
 
 const getDriver = () => ({
-  getButtonByName: (name: string) =>
-    screen.queryByRole('button', {
+  getButtonExists: (name: string) =>
+    screen.queryAllByRole('button', {
       name
-    }),
+    }).length !== 0,
   getExportHistoryButton: () =>
     screen.queryByRole('button', {
       name: 'Export History'
     }),
   getClearHistoryButton: () =>
-    screen.queryByRole('button', {
+    screen.getByRole('button', {
       name: 'Clear History'
     }),
   getCalculateButton: () =>
-    screen.queryByRole('button', {
+    screen.getByRole('button', {
       name: 'Calculate'
     }),
   getImportHistoryButton: () => screen.queryByText('Import History'),
-  getLabelByText: (text: string) => screen.queryByText(text),
+  getLabelByText: (text: string) => screen.getByText(text),
+  getLabelExists: (text: string) => screen.queryAllByText(text).length !== 0,
   getInputAt: (index: number) => screen.getAllByRole<HTMLInputElement>('spinbutton')[index],
   setInputAt: async (index: number, value: string) => {
     const input = screen.getAllByRole('spinbutton')[index]
