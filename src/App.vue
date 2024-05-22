@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <HistoryComponent />
+    <ResultComponent />
   </div>
 </template>
-  
+
 <script lang="ts">
-import HistoryComponent from './components/HistoryComponent.vue';
+import ResultComponent from './components/ResultComponent.vue';
 
 export default {
   components: {
-    HistoryComponent
+    ResultComponent,
   },
 };
 </script>
-  

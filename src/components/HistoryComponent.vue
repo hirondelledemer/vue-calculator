@@ -1,87 +1,78 @@
 <template>
-  <div class="container">
-    <CalculatorComponent @calculated="addToHistory" ref="calculator" />
-    <div class="historyActions">
-      <button class="button" @click="clearHistory">Clear History</button>
-      <button class="button" @click="exportHistory">Export History</button>
+  <div>
+    <CalculatorComponent ref="child" @calculated="handleCalculated" v-model:history="historyValue" />
+    <div class="history">
+      <div class="historyEntry" v-for="(entry, index) in historyValue" :key="index"
+        @click="() => setValuesFromHistory(index)">
+        <div>
+          {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
+        </div>
+        <div class="historyEntryArrow">
+          &#x21A9;
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button v-if="historyValue.length !== 0" class="button" @click="exportHistory">Export History</button>
       <label for="file-upload" class="button fileButton">
         Import History
       </label>
       <input id="file-upload" type="file" @change="importHistory" />
+      <button v-if="historyValue.length !== 0" class="button" @click="clearHistory">Clear History</button>
     </div>
   </div>
 </template>
-  
-<script lang="ts">
-import { provide, ref } from 'vue';
+
+<script setup lang="ts">
+
+import { ref, defineEmits } from 'vue'
+
 import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
+const emit = defineEmits(['finished'])
+const child = ref<InstanceType<typeof CalculatorComponent>>();
+const historyValue = ref<HistoryEntry[]>([]);
 
-export default {
-  components: {
-    CalculatorComponent,
-  },
+const handleCalculated = (calculation: HistoryEntry) => {
+  emit('finished', calculation.result)
+}
 
-  setup() {
-    const history = ref<HistoryEntry[]>([]);
+const calculate = () => {
+  child.value!.calculate();
+}
 
-    function addToHistory(calculation: HistoryEntry) {
-      history.value.push(calculation);
-    }
-
-    provide('history', history);
-
-    return {
-      history,
-      addToHistory,
-    };
-  },
-  methods: {
-    exportHistory() {
-      const dataStr = JSON.stringify(this.history);
-      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-      const exportFileDefaultName = 'history.json';
-      let linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
-      linkElement.click();
-    },
-    importHistory(event: Event) {
-      const target = event.target as HTMLInputElement;
-
-      if (target && !!target.files) {
-        const file = target.files[0]
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          try {
-            const importedHistory = JSON.parse(e.target.result);
-            this.history = [...this.history, ...importedHistory.filter((entry: HistoryEntry) => entry.result !== null)];
-          } catch (error) {
-            console.error('Error importing history', error);
-          }
-        };
-        reader.readAsText(file);
-      }
-    },
-
-    clearHistory() {
-      this.history = [];
-    }
+const getOperationSymbol = (operation: string) => {
+  switch (operation) {
+    case 'sum': return '+';
+    case 'minus': return '-';
+    case 'multiply': return '*';
+    case 'divide': return '/';
   }
-};
+}
+
+const exportHistory = () => {
+  child.value!.exportHistory();
+}
+
+const importHistory = (event: Event) => {
+  child.value!.importHistory(event);
+}
+
+const clearHistory = () => {
+  child.value!.clearHistory();
+}
+
+const setValuesFromHistory = (index: number) => {
+  child.value!.setValuesFromHistory(index);
+}
+
+
+
+defineExpose({
+  calculate
+})
 </script>
-  
+
 <style scoped>
-.container {
-  display: flex;
-}
-
-.historyActions {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  margin-left: 12px;
-}
-
 .button {
   border: 2px solid #545454;
   border-radius: 5px;
@@ -90,6 +81,25 @@ export default {
   font-size: 15px;
   padding: 6px 12px;
   cursor: pointer;
+  margin-top: 12px
+}
+
+.history {
+  margin-top: 12px;
+}
+
+.historyEntry {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  &:hover {
+    color: #ffffff
+  }
+}
+
+.historyEntryArrow {
+  margin-left: 6px;
 }
 
 .fileButton {
@@ -101,7 +111,11 @@ input[type="file"] {
   display: none;
 }
 
-.button+.button {
-  margin-top: 6px
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-top: 12px;
 }
 </style>
