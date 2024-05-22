@@ -15,6 +15,7 @@
 
 import { ref, defineEmits, defineModel } from 'vue'
 import { Operation } from '../utils/types'
+import { importJsonFile } from '@/utils/files';
 
 export type Result = number | null | string;
 export interface HistoryEntry {
@@ -37,7 +38,7 @@ const addToHistory = (calculation: HistoryEntry) => {
 }
 
 const exportHistory = () => {
-  const dataStr = JSON.stringify(history.value);
+  const dataStr = history.value.map(entry => JSON.stringify(entry)).join('\n');
   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
   const exportFileDefaultName = 'history.json';
   let linkElement = document.createElement('a');
@@ -51,22 +52,9 @@ const clearHistory = () => {
 }
 
 const importHistory = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-
-  if (target && !!target.files) {
-    const file = target.files[0]
-    const reader = new FileReader();
-
-    reader.onload = (e: any) => {
-      try {
-        const importedHistory = JSON.parse(e.target.result);
-        history.value = [...importedHistory.filter((entry: HistoryEntry) => entry.result !== null)];
-      } catch (error) {
-        console.error('Error importing history', error);
-      }
-    };
-    reader.readAsText(file);
-  }
+  importJsonFile<HistoryEntry>(event, (importedEntries) => {
+    history.value = [...importedEntries];
+  });
 }
 
 const calculateResult = () => {
