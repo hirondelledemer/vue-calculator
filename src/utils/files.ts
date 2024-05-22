@@ -8,7 +8,6 @@ export function importJsonFile<T>(event: Event, callback: (val: T[]) => void) {
   reader.onload = (e: any) => {
     const text = e.target.result
     const lines = text.split('\n')
-    console.log(lines)
     const validEntries: T[] = []
 
     lines.forEach((line: string) => {
