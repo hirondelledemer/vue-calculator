@@ -1,13 +1,13 @@
 <template>
   <div>
-    <input v-model.number="num1" type="number" placeholder="Enter first number" />
-    <select v-model="operation">
+    <input class="input" v-model.number="num1" type="number" placeholder="Enter first number" />
+    <select class="select" v-model="operation">
       <option value="sum">+</option>
       <option value="minus">-</option>
       <option value="multiply">*</option>
       <option value="divide">/</option>
     </select>
-    <input v-model.number="num2" type="number" placeholder="Enter second number" />
+    <input class="input" v-model.number="num2" type="number" placeholder="Enter second number" />
   </div>
 </template>
 
@@ -108,3 +108,39 @@ defineExpose({
   exportHistory,
 })
 </script>
+
+
+<style scoped>
+.select {
+  appearance: none;
+  background: none;
+  color: inherit;
+  box-shadow: none;
+
+
+  border-radius: 20%;
+  background-color: #464646;
+  color: #ffffff;
+  padding: 4px 12px;
+  margin: 0 12px;
+  font-size: 18px;
+}
+
+.input {
+  background-color: transparent;
+  -moz-appearance: textfield;
+  color: #ffffff;
+
+  width: 50px;
+  border-radius: 5px;
+  padding: 4px;
+  font-size: 18px;
+
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>
