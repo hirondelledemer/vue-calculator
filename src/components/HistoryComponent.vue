@@ -2,8 +2,14 @@
   <div>
     <CalculatorComponent ref="child" @calculated="handleCalculated" v-model:history="historyValue" />
     <div class="history">
-      <div v-for="(entry, index) in historyValue" :key="index">
-        {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
+      <div class="historyEntry" v-for="(entry, index) in historyValue" :key="index"
+        @click="() => setValuesFromHistory(index)">
+        <div>
+          {{ entry.num1 }} {{ getOperationSymbol(entry.operation) }} {{ entry.num2 }} = {{ entry.result }}
+        </div>
+        <div class="historyEntryArrow">
+          &#x21A9;
+        </div>
       </div>
     </div>
     <div class="actions">
@@ -55,6 +61,11 @@ const clearHistory = () => {
   child.value!.clearHistory();
 }
 
+const setValuesFromHistory = (index: number) => {
+  child.value!.setValuesFromHistory(index);
+}
+
+
 
 defineExpose({
   calculate
@@ -75,6 +86,20 @@ defineExpose({
 
 .history {
   margin-top: 12px;
+}
+
+.historyEntry {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  &:hover {
+    color: #ffffff
+  }
+}
+
+.historyEntryArrow {
+  margin-left: 6px;
 }
 
 .fileButton {

@@ -68,7 +68,7 @@ const importHistory = (event: Event) => {
   }
 }
 
-const calculate = () => {
+const calculateResult = () => {
   switch (operation.value) {
     case 'sum':
       result.value = num1.value + num2.value;
@@ -88,15 +88,29 @@ const calculate = () => {
       break;
   }
 
+
+}
+
+const calculate = () => {
+  calculateResult()
   const historyEntry: HistoryEntry = {
     num1: num1.value,
     num2: num2.value,
     operation: operation.value,
     result: result.value
-
   }
+  emit('calculated', historyEntry);
   addToHistory(historyEntry);
-  emit('calculated', historyEntry)
+}
+
+const setValuesFromHistory = (index: number) => {
+  const historyEntry = history.value[index];
+  num1.value = historyEntry.num1
+  num2.value = historyEntry.num2
+  operation.value = historyEntry.operation
+  operation.value = historyEntry.operation
+  result.value = historyEntry.result
+  calculateResult();
 }
 
 defineExpose({
@@ -106,6 +120,7 @@ defineExpose({
   clearHistory,
   addToHistory,
   exportHistory,
+  setValuesFromHistory
 })
 </script>
 
