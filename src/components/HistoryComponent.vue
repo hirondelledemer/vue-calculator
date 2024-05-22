@@ -28,6 +28,7 @@
 import { ref, defineEmits } from 'vue'
 
 import CalculatorComponent, { type HistoryEntry } from './CalculatorComponent.vue';
+import { Operation } from '../utils/types';
 
 const emit = defineEmits(['finished'])
 const child = ref<InstanceType<typeof CalculatorComponent>>();
@@ -41,12 +42,12 @@ const calculate = () => {
   child.value!.calculate();
 }
 
-const getOperationSymbol = (operation: string) => {
+const getOperationSymbol = (operation: Operation) => {
   switch (operation) {
-    case 'sum': return '+';
-    case 'minus': return '-';
-    case 'multiply': return '*';
-    case 'divide': return '/';
+    case Operation.sum: return '+';
+    case Operation.minus: return '-';
+    case Operation.multiply: return '*';
+    case Operation.divide: return '/';
   }
 }
 
@@ -109,7 +110,6 @@ defineExpose({
 input[type="file"] {
   display: none;
 }
-
 
 .actions {
   display: flex;

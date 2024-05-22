@@ -14,18 +14,19 @@
 <script setup lang="ts">
 
 import { ref, defineEmits, defineModel } from 'vue'
+import { Operation } from '../utils/types'
 
 export type Result = number | null | string;
 export interface HistoryEntry {
   num1: number;
   num2: number;
-  operation: string;
+  operation: Operation;
   result: Result;
 }
 
 const num1 = ref<number>(0)
 const num2 = ref<number>(0)
-const operation = ref<string>('sum')
+const operation = ref<Operation>(Operation.sum)
 const result = ref<Result>(null)
 const history = defineModel<HistoryEntry[]>('history', { default: [] })
 
@@ -70,16 +71,16 @@ const importHistory = (event: Event) => {
 
 const calculateResult = () => {
   switch (operation.value) {
-    case 'sum':
+    case Operation.sum:
       result.value = num1.value + num2.value;
       break;
-    case 'minus':
+    case Operation.minus:
       result.value = num1.value - num2.value;
       break;
-    case 'multiply':
+    case Operation.multiply:
       result.value = num1.value * num2.value;
       break;
-    case 'divide':
+    case Operation.divide:
       if (num2.value !== 0) {
         result.value = num1.value / num2.value;
       } else {
